@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "memory_resource": "c",
+        "stdio.h": "c",
+        "inputhandler.h": "c",
+        "generics.h": "c",
+        "terrainhandler.h": "c",
+        "allegro_font.h": "c",
+        "stdbool.h": "c"
+    }
+}
