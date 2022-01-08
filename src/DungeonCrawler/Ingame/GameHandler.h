@@ -11,5 +11,6 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw);
 void DrawGame();
 void InitiateGame();
 void DeinitGame();
+void DrawNewFloorText();
 
 #endif

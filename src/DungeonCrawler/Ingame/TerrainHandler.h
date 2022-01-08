@@ -8,6 +8,9 @@
 #include "../lowlevel/Generics.h"
 #include "../lowlevel/Physics.h"
 
+int CurrentFloor;
+bool ChangingFloors;
+
 typedef enum LevelType{
     ROOM_TEST,
     ROOM_SPAWN,
@@ -35,4 +38,5 @@ void EnteringNewRoom(BoxCollider *PlayerCollider, Vector2 *PlayerPosition);
 void UpdateColliders();
 
 bool CollidedWithWalls(BoxCollider entity);
+bool CollidedWithNewFloorTile(BoxCollider player);
 #endif

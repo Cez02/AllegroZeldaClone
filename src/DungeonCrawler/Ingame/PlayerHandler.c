@@ -25,7 +25,6 @@ Sprite currentSwordSprite;
 
 Vector2 SwordSpritePosition;
 
-BoxCollider PlayerCollider;
 BoxCollider SwordCollider;
 
 #define PLAYER_SPRITE_SIZE 16
@@ -260,6 +259,12 @@ void PlayerMovement(bool *redraw){
 
         PlayerCollider.Origin.x = PlayerPosition.x;
         PlayerCollider.Origin.y = PlayerPosition.y;
+    }
+
+    if(CollidedWithNewFloorTile(PlayerCollider)){
+        CurrentFloor++;
+        printf("WHAT\n");
+        ChangingFloors = true;
     }
 
 

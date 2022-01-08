@@ -5,23 +5,26 @@
 
 const int ROOM_COUNT = 10;
 
+bool spritesLoaded = false;
 Sprite TerrainSprites[64];
 /*
     0    = dungeon border
     1-4  = doors open
     5-8  = doors closed
     9-12 = floor tiles    
-
+    13   = exit floor tile
 */
 
 Level *Rooms[10][10];
 int RoomsToCreate = ROOM_COUNT;
-
 Vector2 RoomQueue[101];
 bool isOnQueue[10][10];
 int currentRoomIndex=0, nextRoomIndex=1;
-
 Vector2 CurrentRoomCoords;
+
+bool CollidersSet = false;
+bool collidersUpdated = false;
+
 
 BoxCollider DoorColliders[4];
 
@@ -30,7 +33,10 @@ BoxCollider DoorColliders[4];
 //otherwise 1 collider suffices
 BoxCollider WallColliders[8];
 
+BoxCollider NewFloorTile;
+
 Vector2 PlayerSpawnPositions[4];
+
 
 void LoadSprites(){
 
@@ -49,6 +55,9 @@ void LoadSprites(){
         TerrainSprites[i].bitmap = sprite_grab(sheet, 16*(i-9), 0, 16, 16);
     }
 
+    TerrainSprites[13].bitmap = sprite_grab(sheet, 64, 0, 16, 16);
+
+    spritesLoaded = true;
 
     //al_destroy_bitmap(sheet);
 }
@@ -64,14 +73,43 @@ bool AvailableRoom(Vector2 dir, int i, int j){
 
 void SetRoomTiles(int x, int y){
     
+    //set the default tiles
     for(int i = 0; i<7; i++){
         for(int j = 0; j<12; j++){
             Rooms[x][y]->levelTiles[i][j] = 9;
         }
     }
+
+    if(Rooms[x][y]->ThisLevelType == ROOM_NEXT_FLOOR){
+        Rooms[x][y]->levelTiles[3][5] = 13;
+    }
+}
+
+void ResetRooms(){
+    RoomsToCreate = ROOM_COUNT;
+
+    for(int i = 0; i<10; i++){
+        for(int j = 0; j<10; j++){
+            if(Rooms[i][j] != 0){
+                free(Rooms[i][j]);
+            }
+            Rooms[i][j] = 0;
+            isOnQueue[i][j] = false;
+        }
+    }
+
+    for(int i = 0; i<100; i++){
+        SetVector2(&RoomQueue[i], 0, 0);
+    }
 }
 
 void GenerateRooms(){
+
+    //flags:
+    bool exitRoom = false;
+
+    //room generation
+    ResetRooms();
 
     currentRoomIndex = 0;
     nextRoomIndex = 1;
@@ -88,9 +126,19 @@ void GenerateRooms(){
 
         Rooms[i][j] = malloc(sizeof(Level));
 
-        SetRoomTiles(i, j);
 
         Rooms[i][j]->ThisLevelType = ROOM_TEST;
+
+        int Chance = GetRandomDigit();
+
+        if(((float)(Chance)/10 < 2 || currentRoomIndex == nextRoomIndex || RoomsToCreate == 0) && !exitRoom && currentRoomIndex > 4){
+            exitRoom = true;
+            printf("THIS ROOM IS EXIT %d %d\n", i, j);
+            
+            Rooms[i][j]->ThisLevelType = ROOM_NEXT_FLOOR;
+        }
+
+        SetRoomTiles(i, j);
 
         int howManyRoomsCanBeCreated = 0;
 
@@ -163,17 +211,11 @@ void GenerateRooms(){
 
 }
 
+void SetColliders(){
 
-void InitTerrain(){
-    LoadSprites();
-    GenerateRooms();
-
-    CurrentRoomCoords.x = 5;
-    CurrentRoomCoords.y = 5;
-
+    CollidersSet = true;
 
     //prepare doors colliders
-
 
     SetVector2(&DoorColliders[NORTH].Origin, 112, 0);
     SetVector2(&DoorColliders[NORTH].Dimensions, 31, 20);
@@ -201,26 +243,45 @@ void InitTerrain(){
     
     //prepare the wall colliders
 
-    SetVector2(&WallColliders[0].Origin, 0, 0);
+    SetVector2(&WallColliders[0].Origin,       0, 0);
     SetVector2(&WallColliders[0].Dimensions, 144, 32);
-    SetVector2(&WallColliders[1].Origin, 144, 0);
+    SetVector2(&WallColliders[1].Origin,     144, 0);
     SetVector2(&WallColliders[1].Dimensions, 112, 32);
 
-    SetVector2(&WallColliders[2].Origin, 224, 32);
+    SetVector2(&WallColliders[2].Origin,    224, 32);
     SetVector2(&WallColliders[2].Dimensions, 32, 72);
-    SetVector2(&WallColliders[3].Origin, 224, 104);
+    SetVector2(&WallColliders[3].Origin,    224, 104);
     SetVector2(&WallColliders[3].Dimensions, 32, 72);
 
-    SetVector2(&WallColliders[4].Origin, 0, 144);
+    SetVector2(&WallColliders[4].Origin,       0, 144);
     SetVector2(&WallColliders[4].Dimensions, 144, 32);
-    SetVector2(&WallColliders[5].Origin, 144, 144);
+    SetVector2(&WallColliders[5].Origin,     144, 144);
     SetVector2(&WallColliders[5].Dimensions, 112, 32);
 
-    SetVector2(&WallColliders[6].Origin, 0, 32);
+    SetVector2(&WallColliders[6].Origin,      0, 32);
     SetVector2(&WallColliders[6].Dimensions, 32, 72);
-    SetVector2(&WallColliders[7].Origin, 0, 104);
+    SetVector2(&WallColliders[7].Origin,      0, 104);
     SetVector2(&WallColliders[7].Dimensions, 32, 72);
+
+    SetVector2(&(NewFloorTile.Dimensions), 16, 16);
+    SetVector2(&(NewFloorTile.Origin),      0, 0);
     
+
+}
+
+void InitTerrain(){
+    if(!spritesLoaded) LoadSprites();
+    GenerateRooms();
+
+    CurrentRoomCoords.x = 5;
+    CurrentRoomCoords.y = 5;
+
+    collidersUpdated = false;
+
+    //NewFloorTile.Origin.x = 0;
+    //NewFloorTile.Origin.y = 0;
+
+    if(!CollidersSet) SetColliders();
 }
 
 void DeinitTerrain(){
@@ -289,7 +350,6 @@ void DrawTerrain(){
 
 }
 
-
 void EnteringNewRoom(BoxCollider *PlayerCollider, Vector2 *PlayerPosition){
     int entering = -1;
 
@@ -302,13 +362,7 @@ void EnteringNewRoom(BoxCollider *PlayerCollider, Vector2 *PlayerPosition){
     else if(CheckCollision(*PlayerCollider,  DoorColliders[WEST]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[WEST] )
         entering = WEST;
 
-
-
-    printf("What room: %d\n", entering);
-
     if(entering == -1) return;
-
-    printf("What room: %d\n", entering);
 
     if(!Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[entering]) return;
 
@@ -320,9 +374,15 @@ void EnteringNewRoom(BoxCollider *PlayerCollider, Vector2 *PlayerPosition){
     PlayerCollider->Origin.x = PlayerSpawnPositions[(entering+2)%4].x;
     PlayerCollider->Origin.y = PlayerSpawnPositions[(entering+2)%4].y;
 
+    collidersUpdated = false;
+
 }
 
+
 void UpdateColliders(){
+
+    if(collidersUpdated) return;
+    collidersUpdated = true;
 
     //update each of the walls.
 
@@ -339,6 +399,14 @@ void UpdateColliders(){
                     
     if(thisRoom->doors[WEST] ) SetVector2(&WallColliders[6].Dimensions, 32, 40);
                           else SetVector2(&WallColliders[6].Dimensions, 32, 72);
+
+    //place the exit room tile
+    if(thisRoom->ThisLevelType == ROOM_NEXT_FLOOR){
+        SetVector2(&(NewFloorTile.Origin), 112, 80);
+    }
+    else{
+        SetVector2(&(NewFloorTile.Origin), 0, 0);
+    }
 
 }
 
@@ -377,4 +445,8 @@ bool CollidedWithWalls(BoxCollider entity){
 
     return false;
 
+}
+
+bool CollidedWithNewFloorTile(BoxCollider player){
+    return CheckCollision(player, NewFloorTile);
 }

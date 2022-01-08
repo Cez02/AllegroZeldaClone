@@ -7,11 +7,19 @@
 #include "../lowlevel/Generics.h"
 #include "./PlayerHandler.h"
 #include "./TerrainHandler.h"
+#include "../lowlevel/DisplayHandler.h"
+
+
 
 void InitiateGame(){
+    CurrentFloor = 1;
+    ChangingFloors = true;
     InitPlayer();
     InitTerrain();
 }
+
+bool TextDrawn = false;
+int ChangingFloorsFrameCount = 0;
 
 void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
 
@@ -22,8 +30,26 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
         //another frame
         case ALLEGRO_EVENT_TIMER:
             
-            HandlePlayer(event, done, redraw);
+            if(ChangingFloors){
+                if((float)(ChangingFloorsFrameCount)/60 > 3){
+                    ChangingFloors = false;
+                    ChangingFloorsFrameCount = 0;
+                    TextDrawn = false;
+                    InitTerrain();
+                    *redraw = true;
+                }
+                else if(!TextDrawn){
+                    *redraw = true;
+                }
+
+                ChangingFloorsFrameCount++;
+
+                break;
+            }
+
             UpdateColliders();
+            HandlePlayer(event, done, redraw);
+
             
         case ALLEGRO_EVENT_KEY_DOWN:
         /*
@@ -54,7 +80,33 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
     }
 }
 
+char s[12] = "Floor      ";
+void DrawNewFloorText(){
+    TextDrawn = true;
+
+    int reversedFloorNumber = 0, tmp = CurrentFloor;
+
+    while(tmp){
+        reversedFloorNumber *= 10;
+        reversedFloorNumber += tmp%10;
+        tmp /= 10;
+    }
+
+    int ind = 6;
+    while(reversedFloorNumber){
+        s[ind] = '0' + reversedFloorNumber%10;
+        reversedFloorNumber /= 10;
+    }
+
+    al_draw_text(GAME_FONT, al_map_rgb(255, 255, 255), BUFFER_W/2,  BUFFER_H/2, ALLEGRO_ALIGN_CENTER, s);
+
+}
+
 void DrawGame(){
+    if(ChangingFloors){
+        DrawNewFloorText();
+        return;
+    }
     DrawTerrain();
     DrawPlayer();
     
