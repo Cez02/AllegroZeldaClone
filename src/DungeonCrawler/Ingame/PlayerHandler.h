@@ -1,12 +1,8 @@
 #ifndef INCLUDE_PLAYER_HANDLER
     #define INCLUDE_PLAYER_HANDLER
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
-#include "../lowlevel/Generics.h"
-#include "../lowlevel/Physics.h"
+#include "TerrainHandler.h"
+#include "../lowlevel/InputHandler.h"
 
 BoxCollider PlayerCollider;
 

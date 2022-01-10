@@ -1,9 +1,4 @@
 #include "Generics.h"
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
 
 void must_init(bool test, const char *description)
 {

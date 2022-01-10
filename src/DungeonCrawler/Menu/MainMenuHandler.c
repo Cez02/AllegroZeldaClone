@@ -1,12 +1,4 @@
 #include "MainMenuHandler.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <allegro5/allegro5.h>
-#include "../lowlevel/Generics.h"
-#include "../lowlevel/InputHandler.h"
-#include "../lowlevel/DisplayHandler.h"
-#include <string.h>
 
 
 //variables

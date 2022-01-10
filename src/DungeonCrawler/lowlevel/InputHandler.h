@@ -1,9 +1,7 @@
 #ifndef INCLUDE_INPUT_HANDLER
     #define INCLUDE_INPUT_HANDLER
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <allegro5/allegro5.h>
+#include "Generics.h"
 
 
 #define KEY_SEEN     1

@@ -1,11 +1,6 @@
 #ifndef INCLUDE_TERRAIN_HANDLER
     #define INCLUDE_TERRAIN_HANDLER
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
-#include "../lowlevel/Generics.h"
 #include "../lowlevel/Physics.h"
 
 int CurrentFloor;

@@ -1,9 +1,7 @@
 #ifndef INCLUDE_DISPLAY_HANDLER
     #define INCLUDE_DISPLAY_HANDLER
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <allegro5/allegro5.h>
+#include "Generics.h"
 
 #define BUFFER_W 256
 #define BUFFER_H 176

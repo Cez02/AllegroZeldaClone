@@ -1,14 +1,5 @@
 #include "GameHandler.h"
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
-#include "../lowlevel/Generics.h"
-#include "./PlayerHandler.h"
-#include "./TerrainHandler.h"
-#include "../lowlevel/DisplayHandler.h"
-
 
 
 void InitiateGame(){

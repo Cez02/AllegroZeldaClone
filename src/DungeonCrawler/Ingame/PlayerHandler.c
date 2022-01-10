@@ -1,14 +1,5 @@
 #include "PlayerHandler.h"
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
-#include "../lowlevel/Generics.h"
-#include "../lowlevel/InputHandler.h"
-#include "../lowlevel/Physics.h"
-#include "../Ingame/TerrainHandler.h"
 
 Vector2 PlayerPosition;
 Vector2 OldVelocity;

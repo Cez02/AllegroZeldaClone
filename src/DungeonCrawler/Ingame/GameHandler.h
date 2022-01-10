@@ -1,11 +1,8 @@
 #ifndef INCLUDE_GAME_HANDLER
     #define INCLUDE_GAME_HANDLER
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
-#include "../lowlevel/Generics.h"
+#include "PlayerHandler.h"
+#include "../lowlevel/DisplayHandler.h"
 
 void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw);
 void DrawGame();
