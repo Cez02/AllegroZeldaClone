@@ -1,5 +1,4 @@
-#ifndef INCLUDE_GAME_HANDLER
-    #define INCLUDE_GAME_HANDLER
+#pragma once
 
 #include "PlayerHandler.h"
 #include "../lowlevel/DisplayHandler.h"
@@ -9,5 +8,3 @@ void DrawGame();
 void InitiateGame();
 void DeinitGame();
 void DrawNewFloorText();
-
-#endif

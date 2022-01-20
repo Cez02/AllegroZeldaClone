@@ -1,5 +1,4 @@
-#ifndef INCLUDE_MAIN_MENU_HANDLER
-    #define INCLUDE_MAIN_MENU_HANDLER
+#pragma once
 
 #include "../lowlevel/DisplayHandler.h"
 #include "../lowlevel/InputHandler.h"
@@ -11,4 +10,3 @@ void HandleMainMenu(ALLEGRO_EVENT *event, bool *done, bool *redraw);
 void DrawMainMenu();
 
 void UpdateMainMenuInfo();
-#endif

@@ -1,5 +1,4 @@
-#ifndef INCLUDE_DISPLAY_HANDLER
-    #define INCLUDE_DISPLAY_HANDLER
+#pragma once
 
 #include "Generics.h"
 
@@ -19,5 +18,3 @@ void disp_deinit();
 void disp_pre_draw();
 
 void disp_post_draw();
-
-#endif

@@ -16,6 +16,7 @@ ALLEGRO_BITMAP* sprite_grab(ALLEGRO_BITMAP *sheet, int x, int y, int w, int h)
     return sprite;
 }
 
+
 //game font
 ALLEGRO_FONT* GAME_FONT;
 //game timer
@@ -28,6 +29,10 @@ LEVEL_TYPE CurrentLevel = MENU;
 char GameSeedString[256];
 
 void InitializeGenerics(){
+
+    //AssetDirectory[100] = "src/Assets/";
+
+    strcpy(AssetDirectory, "src/Assets/");
 
     for(int i = 0; i<15; i++){
         GameSeed *= 10;

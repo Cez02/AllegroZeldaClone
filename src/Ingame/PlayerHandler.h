@@ -1,5 +1,4 @@
-#ifndef INCLUDE_PLAYER_HANDLER
-    #define INCLUDE_PLAYER_HANDLER
+#pragma once
 
 #include "TerrainHandler.h"
 #include "../lowlevel/InputHandler.h"
@@ -13,5 +12,3 @@ void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw);
 void InitPlayer();
 
 void DeinitPlayer();
-
-#endif

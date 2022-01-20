@@ -38,7 +38,11 @@ Vector2 PlayerSpawnPositions[4];
 
 void LoadSprites(){
 
-    ALLEGRO_BITMAP *sheet = al_load_bitmap("src/DungeonCrawler/Assets/Ingame/DungeonTileset.png");
+    char buffer[100];
+    strcpy(buffer, AssetDirectory);
+    strcat(buffer, "Ingame/DungeonTileset.png");
+
+    ALLEGRO_BITMAP *sheet = al_load_bitmap(buffer);
     must_init(sheet, "terrain sprite sheet");
 
     TerrainSprites[0].bitmap = sprite_grab(sheet, 0, 80, 256, 176);

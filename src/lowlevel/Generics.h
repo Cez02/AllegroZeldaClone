@@ -1,5 +1,4 @@
-#ifndef INCLUDE_GENERICS
-    #define INCLUDE_GENERICS
+#pragma once
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -10,6 +9,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
+
 
 //game font
 ALLEGRO_FONT* GAME_FONT;
@@ -26,6 +26,8 @@ typedef struct Sprite{
     ALLEGRO_BITMAP *bitmap;
 
 } Sprite;
+
+char AssetDirectory[100];
 
 
 typedef enum LEVEL_TYPE{
@@ -53,5 +55,3 @@ void InitializeGenerics();
 int GetRandomDigit();
 
 int Min(int x, int y);
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef INCLUDE_TERRAIN_HANDLER
-    #define INCLUDE_TERRAIN_HANDLER
+#pragma once
 
 #include "../lowlevel/Physics.h"
 
@@ -34,4 +33,3 @@ void UpdateColliders();
 
 bool CollidedWithWalls(BoxCollider entity);
 bool CollidedWithNewFloorTile(BoxCollider player);
-#endif

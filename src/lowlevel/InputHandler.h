@@ -1,5 +1,4 @@
-#ifndef INCLUDE_INPUT_HANDLER
-    #define INCLUDE_INPUT_HANDLER
+#pragma once
 
 #include "Generics.h"
 
@@ -16,5 +15,3 @@ void keyboard_update(ALLEGRO_EVENT* event);
 
 bool ButtonClicked(int keycode);
 bool ButtonHeldDown(int keycode);
-
-#endif

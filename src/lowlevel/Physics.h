@@ -1,5 +1,4 @@
-#ifndef INCLUDE_PHYSICS
-    #define INCLUDE_PHYSICS
+#pragma once
 
 #include "Generics.h"
 
@@ -19,5 +18,3 @@ bool CheckCollision(BoxCollider A, BoxCollider B);
 void SetVector2(Vector2 *dest, int x, int y);
 
 Vector2 GetDirectionVector(DIRECTION dir);
-
-#endif

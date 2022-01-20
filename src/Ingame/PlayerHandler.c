@@ -23,7 +23,11 @@ BoxCollider SwordCollider;
 //Load player  sprites
 void LoadPlayerSprites(){
 
-    ALLEGRO_BITMAP *sheet = al_load_bitmap("src/DungeonCrawler/Assets/Ingame/PlayerSprites.png");
+    char buffer[100];
+    strcpy(buffer, AssetDirectory);
+    strcat(buffer, "Ingame/PlayerSprites.png");
+
+    ALLEGRO_BITMAP *sheet = al_load_bitmap(buffer);
     must_init(sheet, "player sprite sheet");
 
     for(int i = 0; i<4; i++){
