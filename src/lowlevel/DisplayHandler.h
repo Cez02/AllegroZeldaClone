@@ -11,6 +11,10 @@
 
 ALLEGRO_DISPLAY* Display;
 
+bool Fullscreen;
+
+void SwitchScreenMode();
+
 void disp_init();
 
 void disp_deinit();

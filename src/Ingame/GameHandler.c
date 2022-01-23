@@ -21,6 +21,13 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
         //another frame
         case ALLEGRO_EVENT_TIMER:
             
+            //player wants to select the option
+            if(ButtonClicked(ALLEGRO_KEY_ESCAPE)){
+                *redraw = true;
+                CurrentLevel = MENU;
+                break;
+            }
+
             if(ChangingFloors){
                 if((float)(ChangingFloorsFrameCount)/60 > 3){
                     ChangingFloors = false;

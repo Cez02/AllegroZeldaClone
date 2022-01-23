@@ -1,6 +1,6 @@
 #include "Menu/MainMenuHandler.h"
 #include "Ingame/GameHandler.h"
-
+#include "Settings/SettingsHandler.h"
 
 
 int main(){
@@ -46,6 +46,7 @@ int main(){
 
                 break;
             case SETTINGS:
+                HandleSettings(&currentEvent, &done, &redraw);
                 break;
             case INGAME:
                 HandleGame(&currentEvent, &done, &redraw);
@@ -68,6 +69,7 @@ int main(){
                     DrawMainMenu();
                     break;
                 case SETTINGS:
+                    DrawSettings();
                     break;
                 case INGAME:
                     DrawGame();

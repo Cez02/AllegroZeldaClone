@@ -56,6 +56,12 @@ void HandleMainMenu(ALLEGRO_EVENT *event, bool *done, bool *redraw){
                 break;
             }
 
+            if(ButtonClicked(ALLEGRO_KEY_F5)){
+                *redraw = true;
+                SwitchScreenMode();
+                break;
+            }
+
             //player wants to select the option
             if(ButtonClicked(ALLEGRO_KEY_ENTER)){
                 *redraw = true;
