@@ -1,6 +1,5 @@
 #include "MainMenuHandler.h"
 
-
 //variables
 char options[3][20] = {" Play ", " Settings ", " Exit "};
 int numberOfOptions = 3;
@@ -33,6 +32,9 @@ void UpdateMainMenuInfo(bool *redraw){
         *redraw = true;
     }
 
+    if(ButtonClicked(ALLEGRO_KEY_H)){
+        PlayMusic(0);
+    }
 
     if(currentOption < 0) currentOption += 3;
     else currentOption %= 3;
@@ -66,7 +68,10 @@ void HandleMainMenu(ALLEGRO_EVENT *event, bool *done, bool *redraw){
             if(ButtonClicked(ALLEGRO_KEY_ENTER)){
                 *redraw = true;
 
-                     if(currentOption == 0) CurrentLevel = INGAME;
+                if(currentOption == 0){
+                    CurrentLevel = INGAME;
+                    PlayMusic(1);
+                }
                 else if(currentOption == 1) CurrentLevel = SETTINGS;
                 else{
                     *done = true;

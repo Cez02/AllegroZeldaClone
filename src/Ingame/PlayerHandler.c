@@ -258,7 +258,6 @@ void PlayerMovement(bool *redraw){
 
     if(CollidedWithNewFloorTile(PlayerCollider)){
         CurrentFloor++;
-        printf("WHAT\n");
         ChangingFloors = true;
     }
 

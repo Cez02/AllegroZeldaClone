@@ -135,7 +135,6 @@ void GenerateRooms(){
 
         if(((float)(Chance)/10 < 2 || currentRoomIndex == nextRoomIndex || RoomsToCreate == 0) && !exitRoom && currentRoomIndex > 4){
             exitRoom = true;
-            printf("THIS ROOM IS EXIT %d %d\n", i, j);
             
             Rooms[i][j]->ThisLevelType = ROOM_NEXT_FLOOR;
         }

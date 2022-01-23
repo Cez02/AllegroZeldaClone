@@ -18,6 +18,9 @@ int main(){
     //initialize input handler
     keyboard_init();
 
+    //initialize audio
+    init_audio();
+
     must_init(al_init_image_addon(), "image addon");
     must_init(al_init_font_addon(), "font addon");
 
@@ -33,6 +36,8 @@ int main(){
 
     InitiateGame();
 
+    PlayMusic(0);
+
     //main game loop
     while(1){
 
@@ -42,7 +47,9 @@ int main(){
             case MENU:
                 HandleMainMenu(&currentEvent, &done, &redraw);
 
-                if(CurrentLevel == INGAME) HandleGame(&currentEvent, &done, &redraw);
+                if(CurrentLevel == INGAME){
+                    HandleGame(&currentEvent, &done, &redraw);
+                }
 
                 break;
             case SETTINGS:

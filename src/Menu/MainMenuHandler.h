@@ -2,6 +2,7 @@
 
 #include "../lowlevel/DisplayHandler.h"
 #include "../lowlevel/InputHandler.h"
+#include "../lowlevel/SoundHandler.h"
 
 void init_main_menu();
 

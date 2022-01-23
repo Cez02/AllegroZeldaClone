@@ -1,6 +1,6 @@
 #include "GameHandler.h"
 
-
+#include "../lowlevel/SoundHandler.h"
 
 void InitiateGame(){
     CurrentFloor = 1;
@@ -25,6 +25,7 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
             if(ButtonClicked(ALLEGRO_KEY_ESCAPE)){
                 *redraw = true;
                 CurrentLevel = MENU;
+                PlayMusic(0);
                 break;
             }
 
