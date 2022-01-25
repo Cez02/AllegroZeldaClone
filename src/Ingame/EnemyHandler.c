@@ -10,7 +10,7 @@ Sprite EnemySprites[64];
 bool AssetsLoaded = false;
 /*
     0 - 7: Knight sprites
-
+    8: Heart
 
 */
 
@@ -31,6 +31,8 @@ void LoadEnemyAssets(){
         EnemySprites[i].bitmap = sprite_grab(sheet, i*16, 0, 16, 16);
     }
 
+    EnemySprites[8].bitmap = sprite_grab(sheet, 0, 16, 16, 16);
+
 }
 
 void ResetEnemies(){
@@ -46,8 +48,9 @@ void ResetEnemies(){
     }
 }
 
-Enemy *GenerateEnemy(Level *room, int posX, int posY){
-    
+//ENEMY CREATION
+
+Enemy *CreateKnightEnemy(int posX, int posY){
     Enemy *newEnemy = malloc(sizeof(Enemy));
 
     //for now, always generate the test enemy
@@ -70,6 +73,50 @@ Enemy *GenerateEnemy(Level *room, int posX, int posY){
     newEnemy->FrameCounter = 0;
     //newEnemy->Velocity.x = newEnemy->speed;
     newEnemy->AnimFrame = 0;
+    
+    newEnemy->type = KnightEnemy;
+
+    return newEnemy;
+}
+
+Enemy *CreateHeartEnemy(int posX, int posY){
+    Enemy *newEnemy = malloc(sizeof(Enemy));
+
+    //for now, always generate the test enemy
+    SetVector2f(&(newEnemy->position), (float)posX, (float)posY);
+    SetBoxColliderF(&(newEnemy->collider), posX, posY, 16, 16);
+    
+    newEnemy->attackPower = 0;
+    newEnemy->currentHealth = 50;
+    newEnemy->maxHealth = 50;
+    
+    for(int i = 0; i<8; i++){
+        newEnemy->WalkingAnimations[i/2][i%2] = EnemySprites[8];
+    }
+
+    newEnemy->currentSprite = newEnemy->WalkingAnimations[0][0];
+
+    newEnemy->DamagedCounter = 0;
+    newEnemy->CurrentDestination = newEnemy->position;
+    newEnemy->speed = 0;
+    newEnemy->FrameCounter = 0;
+    //newEnemy->Velocity.x = newEnemy->speed;
+    newEnemy->AnimFrame = 0;
+
+    newEnemy->type = Heart;
+
+    return newEnemy;
+}
+
+
+
+
+
+//END OF ENEMY CREATION
+
+Enemy *GenerateEnemy(Level *room, int posX, int posY){
+    
+    return CreateKnightEnemy(posX, posY);
 }
 
 bool CheckForEnemyCollision(Enemy *thisEnemy, int index){
@@ -105,8 +152,29 @@ void UpdateEnemyPosition(Enemy *thisEnemy, int index){
 
 }
 
+void ResetEnemyPositions(){
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][0] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][0]->position), 96, 64);
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][0] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][0]->collider.Origin), 96, 64);
+
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][1] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][1]->position), 96, 96);
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][1] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][1]->collider.Origin), 96, 96);
+
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][2] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][2]->position), 144, 64);
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][2] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][2]->collider.Origin), 144, 64);
+
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][3] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][3]->position), 144, 96);
+    if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][3] != 0) SetVector2f(&(enemies[GetCurrentRoom().x][GetCurrentRoom().y][3]->collider.Origin), 144, 96);
+}
+
+Vector2 oldRoom = {5, 5};
+
 //update the position/collision and other stuff of enemies 
 void HandleEnemies(){
+
+    if(!EqualVectorsInt(oldRoom, GetCurrentRoom(), 0)){
+        oldRoom = GetCurrentRoom();
+        ResetEnemyPositions();
+    }
 
     for(int i = 0; i<5; i++){
         if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] == 0) continue;
@@ -126,8 +194,20 @@ void HandleEnemies(){
                 thisEnemy->CurrentDestination = thisEnemy->position;
                 
                 if(thisEnemy->currentHealth <= 0){
+                    Score += 100;
+                    
+
+                    int heartChance = rand()%20;
+                    if(heartChance >= 18){
+                        //maybe spawn a heart
+                        enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] = CreateHeartEnemy(thisEnemy->position.x, thisEnemy->position.y);
+                    }
+                    else{
+                        enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] = 0;
+                    }
+
                     free(thisEnemy);
-                    enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] = 0;
+                    //enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] = 0;
                     continue;
                 }
             }
@@ -138,7 +218,7 @@ void HandleEnemies(){
 
         
         //handle collision with sword
-        if(CheckCollisionF(thisEnemy->collider, SwordCollider) && thisEnemy->DamagedCounter == 0){
+        if(CheckCollisionF(thisEnemy->collider, SwordCollider) && thisEnemy->DamagedCounter == 0 && thisEnemy->attackPower > 0){
             
             //push according to player direction
             Vector2 tmp = GetDirectionVector(PlayerDirection);
@@ -154,15 +234,31 @@ void HandleEnemies(){
             continue;
         }
 
-        if(CheckCollisionF(thisEnemy->collider, PlayerCollider) && !IsPlayerDamaged()){
+        if(CheckCollisionF(thisEnemy->collider, PlayerCollider) && !IsPlayerDamaged() && thisEnemy->attackPower > 0){
             Vector2f pushVel;
             SetVector2f(&pushVel, (thisEnemy->Velocity.x/0.4)*16, (thisEnemy->Velocity.y/0.4)*16);
             DamagePlayer(thisEnemy->attackPower, pushVel);
             
         }
+        else if(CheckCollisionF(thisEnemy->collider, PlayerCollider)){
+
+            if(thisEnemy->type == Heart){
+
+                GivePlayerHealth(thisEnemy->currentHealth);
+
+                free(thisEnemy);
+                enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] = 0;
+            }
+
+            continue;
+
+        }
 
         if(EqualVectors(thisEnemy->position, thisEnemy->CurrentDestination, 10)){
             //time to pick a new destination
+
+            thisEnemy->CurrentDestination = GetPlayerPosition();
+
             while(EqualVectors(thisEnemy->position, thisEnemy->CurrentDestination, 30)){
                 //thisEnemy->CurrentDestination = GetPlayerPosition();
 
@@ -211,9 +307,10 @@ void GenerateEnemies(int x, int y){
     Level *thisRoom = GetRoom(x, y);
     if(thisRoom == NULL || (x==5 && y==5)) return;
 
-    enemies[x][y][0] = GenerateEnemy(thisRoom, 96, 80);
-    enemies[x][y][1] = GenerateEnemy(thisRoom, 144, 80);
-    enemies[x][y][2] = GenerateEnemy(thisRoom, 80, 115);
+    enemies[x][y][0] = GenerateEnemy(thisRoom, 96, 64);
+    enemies[x][y][1] = GenerateEnemy(thisRoom, 96, 96);
+    enemies[x][y][2] = GenerateEnemy(thisRoom, 144, 64);
+    enemies[x][y][3] = GenerateEnemy(thisRoom, 144, 96);
 }
 
 void init_enemies(){

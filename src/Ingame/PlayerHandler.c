@@ -34,9 +34,12 @@ void DamagePlayer(int damage, Vector2f velocity){
     PlayerVelocity = velocity;
 }
 
-bool IsPlayerDamaged(){
-    return PlayerDamagedCounter > 0;
+void GivePlayerHealth(int health){
+    statistics.currentHealth += health;
+    statistics.currentHealth = Min(statistics.currentHealth, statistics.maxHealth);
 }
+
+
 
 //Load player  sprites
 void LoadPlayerSprites(){
@@ -229,8 +232,8 @@ void PlayerMovement(bool *redraw){
 
     if(PlayerDead) return;
 
-    printf("player position: %f %f\n", PlayerPosition.x, PlayerPosition.y);
-    printf("player collider: %f %f\n", PlayerCollider.Origin.x, PlayerCollider.Origin.y);
+    //printf("player position: %f %f\n", PlayerPosition.x, PlayerPosition.y);
+    //printf("player collider: %f %f\n", PlayerCollider.Origin.x, PlayerCollider.Origin.y);
 
     if(IsPlayerDamaged()){
 
@@ -244,6 +247,8 @@ void PlayerMovement(bool *redraw){
 
         OldVelocity = PlayerVelocity;
 
+        PlayerPosition.y = Minf(127, Maxf(33, PlayerPosition.y));
+        PlayerPosition.x = Minf(207, Maxf(33, PlayerPosition.x));
 
         //check if the player is colliding with a wall
         //if collided, then turn go back to the previous position
@@ -335,7 +340,7 @@ void DrawPlayer(){
 
     if(PlayerDead) return;
 
-    if(playerAttacking){
+    if(playerAttacking && !IsPlayerDamaged()){
         al_draw_bitmap(currentSwordSprite.bitmap, SwordSpritePosition.x, SwordSpritePosition.y, 0);
     }
 
@@ -392,3 +397,6 @@ Vector2f GetPlayerPosition(){
     return PlayerPosition;
 }
 
+bool IsPlayerDamaged(){
+    return PlayerDamagedCounter > 0;
+}

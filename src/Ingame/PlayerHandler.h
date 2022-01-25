@@ -25,6 +25,8 @@ void DeinitPlayer();
 
 void DamagePlayer(int damage, Vector2f velocity);
 
+void GivePlayerHealth(int health);
+
 bool IsPlayerDamaged();
 
 //Accessors

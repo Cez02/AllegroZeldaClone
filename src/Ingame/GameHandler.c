@@ -9,6 +9,7 @@ void InitiateGame(){
     InitTerrain();
     LoadEnemyAssets();
     init_enemies();
+    Score = 0;
 }
 
 bool TextDrawn = false;

@@ -39,3 +39,5 @@ void SetBoxColliderF(BoxColliderF *dest, float x, float y, float w, float h);
 Vector2 GetDirectionVector(DIRECTION dir);
 
 bool EqualVectors(Vector2f a, Vector2f b, float MarginOfError);
+
+bool EqualVectorsInt(Vector2 a, Vector2 b, int MarginOfError);

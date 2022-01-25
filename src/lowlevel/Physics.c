@@ -88,3 +88,6 @@ bool EqualVectors(Vector2f a, Vector2f b, float MarginOfError){
     return (Abs(a.x - b.x) <= MarginOfError) && (Abs(a.y - b.y) <= MarginOfError); 
 }
 
+bool EqualVectorsInt(Vector2 a, Vector2 b, int MarginOfError){ 
+    return (Abs(a.x - b.x) <= MarginOfError) && (Abs(a.y - b.y) <= MarginOfError); 
+}

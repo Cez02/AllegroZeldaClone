@@ -33,8 +33,8 @@ char GameSeedString[256];
 ALLEGRO_FONT *LoadBitmapFont(){
     ALLEGRO_BITMAP *sheet = al_load_bitmap("./Assets/Ingame/testbitmap.png");
     must_init(sheet, "UI bitmap font");
-    int ranges[] = {32,32,70,70,108,108,111,111,114,114,48,57};
-    return al_grab_font_from_bitmap(sheet, 6, ranges);
+    int ranges[] = {32,32,70,70,108,108,111,111,114,114,48,57,47,47};
+    return al_grab_font_from_bitmap(sheet, 7, ranges);
 }
 
 void InitializeGenerics(){
@@ -43,6 +43,8 @@ void InitializeGenerics(){
     al_init_ttf_addon();
     must_init(al_init_image_addon(), "image addon");
     must_init(al_init_font_addon(), "font addon");
+
+    Score = 0;
 
     //AssetDirectory[100] = "src/Assets/";
 
@@ -75,6 +77,14 @@ int GetRandomDigit(){
 
 int Min(int x, int y){
     return x < y ? x : y;
+}
+
+float Minf(float x, float y){
+    return x < y ? x : y;
+}
+
+float Maxf(float x, float y){
+    return x > y ? x : y;
 }
 
 float Abs(float x){

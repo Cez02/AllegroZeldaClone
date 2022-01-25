@@ -31,6 +31,7 @@ void DrawUI(){
 
     //draw the UI background
     al_draw_bitmap(UISprites[0].bitmap, 157, 0, 0);
+    al_draw_bitmap(UISprites[0].bitmap, 156, 146, 0);
 
     //draw the heart backgrounds
     int current = GetPlayerStats().currentHealth;
@@ -64,6 +65,18 @@ void DrawUI(){
     sprintf(buffer, "Floor \n%d", CurrentFloor);
 
     al_draw_text(GAME_UI_FONT, al_map_rgb(255,255,255), 210, 10, ALLEGRO_ALIGN_LEFT, buffer);
+
+    sprintf(buffer, "/ 00000000");
+    buffer[0] = 47;
+    int tmp = Score;
+    int i = 10;
+    while(tmp){
+        buffer[i] = '0' + tmp%10;
+        tmp /= 10;
+        i--;
+    }
+
+    al_draw_text(GAME_UI_FONT, al_map_rgb(255,255,255), 173, 155, ALLEGRO_ALIGN_LEFT, buffer);
 }
 
 int DeathCounter = 0;
@@ -72,10 +85,15 @@ bool dying = false;
 void DrawGameDeath(){
     if(DeathCounter == 0 && !dying){
         dying = true;
-        DeathCounter = 120;
+        DeathCounter = 250;
     }
 
     al_draw_text(GAME_FONT,al_map_rgb(255,255,255), 128, 79, ALLEGRO_ALIGN_CENTER, "GAME OVER" );
+    char buffer[50];
+    sprintf(buffer, "Score: %d", Score);
+
+    al_draw_text(GAME_FONT,al_map_rgb(255,255,255), 128, 90, ALLEGRO_ALIGN_CENTER, buffer );
+
     DeathCounter--;
 
     if(DeathCounter==0){

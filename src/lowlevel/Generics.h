@@ -24,6 +24,8 @@ ALLEGRO_EVENT_QUEUE* queue;
 long long GameSeed;
 int currentDigit;
 
+int Score;
+
 typedef struct Sprite{
 
     ALLEGRO_BITMAP *bitmap;
@@ -60,5 +62,9 @@ void InitializeGenerics();
 int GetRandomDigit();
 
 int Min(int x, int y);
+
+float Minf(float x, float y);
+
+float Maxf(float x, float y);
 
 float Abs(float x);

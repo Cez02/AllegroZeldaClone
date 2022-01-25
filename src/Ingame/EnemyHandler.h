@@ -3,7 +3,14 @@
 #include "../lowlevel/Generics.h"
 #include "../lowlevel/Physics.h"
 
+typedef enum EnemyType{
+    KnightEnemy,
+    Heart
+} EnemyType;
+
 typedef struct Enemy{
+    EnemyType type;
+
     int currentHealth;
     int maxHealth;
     int attackPower;
