@@ -114,8 +114,8 @@ void InitPlayer(){
 
     PlayerDead = false;
 
-    statistics.currentHealth = 1000;
-    statistics.maxHealth = 1000;
+    statistics.currentHealth = 300;
+    statistics.maxHealth = 300;
     PlayerDamagedCounter = 0;
 
     SetBoxColliderF(&PlayerCollider, 64, 64, PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);

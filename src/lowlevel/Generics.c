@@ -31,7 +31,7 @@ LEVEL_TYPE CurrentLevel = MENU;
 char GameSeedString[256];
 
 ALLEGRO_FONT *LoadBitmapFont(){
-    ALLEGRO_BITMAP *sheet = al_load_bitmap("src/Assets/Ingame/testbitmap.png");
+    ALLEGRO_BITMAP *sheet = al_load_bitmap("./Assets/Ingame/testbitmap.png");
     must_init(sheet, "UI bitmap font");
     int ranges[] = {32,32,70,70,108,108,111,111,114,114,48,57};
     return al_grab_font_from_bitmap(sheet, 6, ranges);
@@ -46,7 +46,7 @@ void InitializeGenerics(){
 
     //AssetDirectory[100] = "src/Assets/";
 
-    strcpy(AssetDirectory, "src/Assets/");
+    strcpy(AssetDirectory, "./Assets/");
 
     for(int i = 0; i<15; i++){
         GameSeed *= 10;

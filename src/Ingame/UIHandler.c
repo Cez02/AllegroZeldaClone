@@ -43,15 +43,15 @@ void DrawUI(){
     while(maxH){
 
         //draw the background
-        al_draw_bitmap(UISprites[1].bitmap, (heartIndex%6)*9 + HeartOrigin.x, (heartIndex/6)*9 + HeartOrigin.y, 0);
+        al_draw_bitmap(UISprites[1].bitmap, (heartIndex%5)*9 + HeartOrigin.x, (heartIndex/5)*9 + HeartOrigin.y, 0);
 
         //draw filled
         if(current >= 100){
-            al_draw_bitmap(UISprites[2].bitmap, (heartIndex%6)*9 + HeartOrigin.x, (heartIndex/6)*9 + HeartOrigin.y, 0);
+            al_draw_bitmap(UISprites[2].bitmap, (heartIndex%5)*9 + HeartOrigin.x, (heartIndex/5)*9 + HeartOrigin.y, 0);
             current -= 100;
         }
         else if(current >= 50){
-            al_draw_bitmap(UISprites[3].bitmap, (heartIndex%6)*9 + HeartOrigin.x, (heartIndex/6)*9 + HeartOrigin.y, 0);
+            al_draw_bitmap(UISprites[3].bitmap, (heartIndex%5)*9 + HeartOrigin.x, (heartIndex/5)*9 + HeartOrigin.y, 0);
             current -= 50;
         }
         
