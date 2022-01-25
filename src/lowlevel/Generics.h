@@ -55,3 +55,5 @@ void InitializeGenerics();
 int GetRandomDigit();
 
 int Min(int x, int y);
+
+float Abs(float x);

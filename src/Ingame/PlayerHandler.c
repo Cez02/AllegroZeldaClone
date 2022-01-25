@@ -1,11 +1,18 @@
 #include "PlayerHandler.h"
 
+typedef struct PlayerStats{
+    int currentHealth;
+    int maxHealth;
 
-Vector2 PlayerPosition;
-Vector2 OldVelocity;
-Vector2 PlayerVelocity;
-Vector2 Speed;
-DIRECTION PlayerDirection;
+
+} PlayerStats;
+
+PlayerStats statistics;
+
+Vector2f PlayerPosition;
+Vector2f OldVelocity;
+Vector2f PlayerVelocity;
+Vector2f Speed;
 
 //all two-frame cycles starting from up direction going clockiwse
 Sprite PlayerSpritesMovement[8];
@@ -14,11 +21,25 @@ Sprite PlayerSwordSprites[4];
 Sprite currentPlayerSprite;
 Sprite currentSwordSprite;
 
-Vector2 SwordSpritePosition;
+Vector2f SwordSpritePosition;
 
-BoxCollider SwordCollider;
+int PlayerDamagedCounter = 0;
 
 #define PLAYER_SPRITE_SIZE 16
+
+//Damage player functions
+void DamagePlayer(int damage, Vector2f velocity){
+    PlayerDamagedCounter = 26;
+    if(PlayerVelocity.x != 0 || PlayerVelocity.y != 0)
+        SetVector2f(&(velocity), -1*(float)(GetDirectionVector(PlayerDirection).x) * 10, (float)(GetDirectionVector(PlayerDirection).y) * 10);
+
+    statistics.currentHealth -= damage;
+    PlayerVelocity = velocity;
+}
+
+bool IsPlayerDamaged(){
+    return PlayerDamagedCounter > 0;
+}
 
 //Load player  sprites
 void LoadPlayerSprites(){
@@ -45,7 +66,7 @@ void LoadPlayerSprites(){
 void SetSwordPosition(DIRECTION dir){
 
     currentSwordSprite = PlayerSwordSprites[dir];
-    SetVector2(&SwordSpritePosition, PlayerPosition.x + GetDirectionVector(dir).x*16, PlayerPosition.y - GetDirectionVector(dir).y*16);
+    SetVector2f(&SwordSpritePosition, PlayerPosition.x + GetDirectionVector(dir).x*16, PlayerPosition.y - GetDirectionVector(dir).y*16);
 
     switch(dir){
 
@@ -88,17 +109,11 @@ void InitPlayer(){
     PlayerPosition.y = 64;
     PlayerDirection = NORTH;
 
-    PlayerCollider.Origin.x = 64;
-    PlayerCollider.Origin.y = 64;
-    PlayerCollider.Dimensions.x = PLAYER_SPRITE_SIZE;
-    PlayerCollider.Dimensions.y = PLAYER_SPRITE_SIZE;
+    SetBoxColliderF(&PlayerCollider, 64, 64, PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
 
-    SwordCollider.Origin.x = PlayerCollider.Origin.x + 3;
-    SwordCollider.Origin.y = PlayerCollider.Origin.y - 16;
-    SwordCollider.Dimensions.x = 16;
-    SwordCollider.Dimensions.y = 16;
+    SetBoxColliderF(&SwordCollider, 0, 0, 16, 16);
 
-    SetVector2(&SwordSpritePosition, PlayerPosition.x, PlayerPosition.y+16);
+    SetVector2f(&SwordSpritePosition, PlayerPosition.x, PlayerPosition.y+16);
 
 
 }
@@ -113,6 +128,8 @@ void DeinitPlayer(){
 int frameCounter = 0;
 bool currentSpriteOffset = 0;
 void PlayerAnimation(bool *redraw){
+
+    if(IsPlayerDamaged()) return;
 
     if(PlayerVelocity.x == 0 && PlayerVelocity.y == 0) return;
 
@@ -186,6 +203,8 @@ bool playerAttacking = false;
 
 void PlayerAttack(){
 
+    if(IsPlayerDamaged()) return;
+
     //set the sword collider and sprite
     SetSwordPosition(PlayerDirection);
 
@@ -198,6 +217,40 @@ void PlayerAttack(){
 
 //handles the player input and movement
 void PlayerMovement(bool *redraw){
+
+    printf("player position: %f %f\n", PlayerPosition.x, PlayerPosition.y);
+    printf("player collider: %f %f\n", PlayerCollider.Origin.x, PlayerCollider.Origin.y);
+
+    if(IsPlayerDamaged()){
+
+        ToIdle();
+
+        //update the player position;
+        PlayerPosition.x += PlayerVelocity.x;
+        PlayerPosition.y += PlayerVelocity.y;
+
+        //if(PlayerVelocity.x != 0 || PlayerVelocity.y != 0) ChangeDirection();
+
+        OldVelocity = PlayerVelocity;
+
+
+        //check if the player is colliding with a wall
+        //if collided, then turn go back to the previous position
+        if(CollidedWithWalls(PlayerCollider)){
+            PlayerPosition.x -= PlayerVelocity.x;
+            PlayerPosition.y -= PlayerVelocity.y;
+
+        }
+
+        //if(PlayerPosition.x == 32) 
+
+
+        PlayerCollider.Origin.x = PlayerPosition.x;
+        PlayerCollider.Origin.y = PlayerPosition.y;
+
+        return;
+    }
+
 
     //player input
     PlayerVelocity.x = 0;
@@ -273,8 +326,10 @@ void DrawPlayer(){
         al_draw_bitmap(currentSwordSprite.bitmap, SwordSpritePosition.x, SwordSpritePosition.y, 0);
     }
 
-
-    al_draw_bitmap(currentPlayerSprite.bitmap, PlayerPosition.x, PlayerPosition.y, 0);
+    if(IsPlayerDamaged() && (PlayerDamagedCounter%20 >= 10))
+        al_draw_tinted_bitmap(currentPlayerSprite.bitmap, al_map_rgb(144, 0, 0) ,PlayerPosition.x, PlayerPosition.y, 0);
+    else
+        al_draw_bitmap(currentPlayerSprite.bitmap, PlayerPosition.x, PlayerPosition.y, 0);
 
 }
 
@@ -286,6 +341,11 @@ void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw){
     PlayerMovement(redraw);
     PlayerAnimation(redraw);
 
+    //handle being damaged
+    if(IsPlayerDamaged()){
+        SetVector2f(&(PlayerVelocity), PlayerVelocity.x * 0.5, PlayerVelocity.y * 0.5);
+        PlayerDamagedCounter--;
+    }
 
     //handle the attacking
     if(PlayerAttackingCounter > 0){
@@ -295,6 +355,7 @@ void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw){
         *redraw = true;
         playerAttacking = false;
         currentPlayerSprite = PlayerSpritesMovement[PlayerDirection*2];
+        SetVector2f(&SwordCollider.Origin, 0, 0);
     }
 
     EnteringNewRoom(&PlayerCollider, &PlayerPosition);

@@ -25,20 +25,19 @@ ALLEGRO_SAMPLE *LoadSound(char buffer[], char name[]){
 
 void init_audio(){
 
-    MusicVolume = 1.0;
+    MusicVolume = 0.4;
     SFXVolume = 1.0;
 
     must_init(al_install_audio(), "audio");
     must_init(al_init_acodec_addon(), "audio codecs");
     must_init(al_reserve_samples(SAMPLE_COUNT), "reserve samples");
 
-    char buffer[100];
+    char buffer[200];
 
     //load SFX
-
+    SFXSamples[SOUND_BUTTON_CLICK] = LoadSound(buffer, "MainMenu/Button.wav");
 
     //load music
-
     MusicSamples[0] = LoadSound(buffer, "MainMenu/MenuMusic.wav");
     MusicSamples[1] = LoadSound(buffer, "Ingame/GameMusic.wav");
 

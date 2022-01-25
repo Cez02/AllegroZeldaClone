@@ -38,6 +38,7 @@ int main(){
 
     PlayMusic(0);
 
+
     //main game loop
     while(1){
 

@@ -8,13 +8,25 @@ typedef struct Enemy{
     int maxHealth;
     int attackPower;
 
-    Sprite sprite;
-    Vector2 position;
-    BoxCollider collider;
+    Sprite WalkingAnimations[4][2];
+    int FrameCounter;
+    int AnimFrame;
+
+    Sprite currentSprite;
+    Vector2f position;
+    BoxColliderF collider;
+
+    float DamagedCounter;
+    Vector2f CurrentDestination;
+
+    Vector2f Velocity;
+    float speed;
 } Enemy;
+
+void LoadEnemyAssets();
 
 void DrawEnemies();
 
-//this will be used for generating enemies
-//in each room at enemy spawn points
-Enemy *GenerateEnemy();
+void HandleEnemies();
+
+void init_enemies();

@@ -1,5 +1,6 @@
 #include "SettingsHandler.h"
 
+#include "../lowlevel/SoundHandler.h"
 
 int CurrentOption = 0;
 int optionCount = 2;
@@ -8,6 +9,8 @@ int optionCount = 2;
 void init_settings_menu(){}
 
 void HandleOption(){
+    
+    PlaySound(SOUND_BUTTON_CLICK);
     
     switch(CurrentOption){
 

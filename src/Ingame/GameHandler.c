@@ -7,6 +7,8 @@ void InitiateGame(){
     ChangingFloors = true;
     InitPlayer();
     InitTerrain();
+    LoadEnemyAssets();
+    init_enemies();
 }
 
 bool TextDrawn = false;
@@ -35,6 +37,7 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
                     ChangingFloorsFrameCount = 0;
                     TextDrawn = false;
                     InitTerrain();
+                    init_enemies();
                     *redraw = true;
                 }
                 else if(!TextDrawn){
@@ -48,7 +51,9 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
 
             UpdateColliders();
             HandlePlayer(event, done, redraw);
+            HandleEnemies();
 
+            (*redraw) = true;
             
         case ALLEGRO_EVENT_KEY_DOWN:
         /*
@@ -108,6 +113,7 @@ void DrawGame(){
     }
     DrawTerrain();
     DrawPlayer();
+    DrawEnemies();
     
 }
 

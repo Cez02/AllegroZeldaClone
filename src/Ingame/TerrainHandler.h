@@ -27,9 +27,12 @@ void DrawTerrain();
 void InitTerrain();
 
 void MoveLevel(Vector2 directionVec, DIRECTION dir);
-void EnteringNewRoom(BoxCollider *PlayerCollider, Vector2 *PlayerPosition);
+void EnteringNewRoom(BoxColliderF *PlayerCollider, Vector2f *PlayerPosition);
 
 void UpdateColliders();
 
-bool CollidedWithWalls(BoxCollider entity);
-bool CollidedWithNewFloorTile(BoxCollider player);
+bool CollidedWithWalls(BoxColliderF entity);
+bool CollidedWithNewFloorTile(BoxColliderF player);
+
+Level *GetRoom(int x, int y);
+Vector2 GetCurrentRoom();

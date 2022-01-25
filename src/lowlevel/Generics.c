@@ -58,3 +58,8 @@ int GetRandomDigit(){
 int Min(int x, int y){
     return x < y ? x : y;
 }
+
+float Abs(float x){
+    if(x<0) return -x;
+    return x;
+}

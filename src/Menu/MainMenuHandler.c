@@ -67,6 +67,7 @@ void HandleMainMenu(ALLEGRO_EVENT *event, bool *done, bool *redraw){
             //player wants to select the option
             if(ButtonClicked(ALLEGRO_KEY_ENTER)){
                 *redraw = true;
+                PlaySound(SOUND_BUTTON_CLICK);
 
                 if(currentOption == 0){
                     CurrentLevel = INGAME;

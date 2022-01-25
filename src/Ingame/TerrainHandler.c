@@ -24,16 +24,16 @@ bool CollidersSet = false;
 bool collidersUpdated = false;
 
 
-BoxCollider DoorColliders[4];
+BoxColliderF DoorColliders[4];
 
 //there are two spots for each wall
 //if theres a door then we need to two colliders
 //otherwise 1 collider suffices
-BoxCollider WallColliders[8];
+BoxColliderF WallColliders[8];
 
-BoxCollider NewFloorTile;
+BoxColliderF NewFloorTile;
 
-Vector2 PlayerSpawnPositions[4];
+Vector2f PlayerSpawnPositions[4];
 
 
 void LoadSprites(){
@@ -64,6 +64,10 @@ void LoadSprites(){
     //al_destroy_bitmap(sheet);
 }
 
+
+Level *GetRoom(int x, int y){
+    return Rooms[x][y];
+}
 
 
 bool AvailableRoom(Vector2 dir, int i, int j){
@@ -218,54 +222,54 @@ void SetColliders(){
 
     //prepare doors colliders
 
-    SetVector2(&DoorColliders[NORTH].Origin, 112, 0);
-    SetVector2(&DoorColliders[NORTH].Dimensions, 31, 20);
+    SetVector2f(&DoorColliders[NORTH].Origin, 112, 0);
+    SetVector2f(&DoorColliders[NORTH].Dimensions, 31, 20);
 
-    SetVector2(&DoorColliders[SOUTH].Origin, 112, 155);
-    SetVector2(&DoorColliders[SOUTH].Dimensions, 31, 20);
+    SetVector2f(&DoorColliders[SOUTH].Origin, 112, 155);
+    SetVector2f(&DoorColliders[SOUTH].Dimensions, 31, 20);
 
-    SetVector2(&DoorColliders[EAST].Origin, 236, 72);
-    SetVector2(&DoorColliders[EAST].Dimensions, 19, 31);
+    SetVector2f(&DoorColliders[EAST].Origin, 236, 72);
+    SetVector2f(&DoorColliders[EAST].Dimensions, 19, 31);
 
-    SetVector2(&DoorColliders[WEST].Origin, 0, 72);
-    SetVector2(&DoorColliders[WEST].Dimensions, 19, 31);
+    SetVector2f(&DoorColliders[WEST].Origin, 0, 72);
+    SetVector2f(&DoorColliders[WEST].Dimensions, 19, 31);
 
 
     //prepare the player spawn positions (after room transitions)
 
-    SetVector2(&PlayerSpawnPositions[NORTH], 120, 32);
+    SetVector2f(&PlayerSpawnPositions[NORTH], 120, 32);
 
-    SetVector2(&PlayerSpawnPositions[SOUTH], 120, 128);
+    SetVector2f(&PlayerSpawnPositions[SOUTH], 120, 128);
 
-    SetVector2(&PlayerSpawnPositions[EAST], 207, 79);
+    SetVector2f(&PlayerSpawnPositions[EAST], 207, 79);
 
-    SetVector2(&PlayerSpawnPositions[WEST], 32, 79);
+    SetVector2f(&PlayerSpawnPositions[WEST], 32, 79);
     
     
     //prepare the wall colliders
 
-    SetVector2(&WallColliders[0].Origin,       0, 0);
-    SetVector2(&WallColliders[0].Dimensions, 144, 32);
-    SetVector2(&WallColliders[1].Origin,     144, 0);
-    SetVector2(&WallColliders[1].Dimensions, 112, 32);
+    SetVector2f(&WallColliders[0].Origin,       0, 0);
+    SetVector2f(&WallColliders[0].Dimensions, 144, 32);
+    SetVector2f(&WallColliders[1].Origin,     144, 0);
+    SetVector2f(&WallColliders[1].Dimensions, 112, 32);
 
-    SetVector2(&WallColliders[2].Origin,    224, 32);
-    SetVector2(&WallColliders[2].Dimensions, 32, 72);
-    SetVector2(&WallColliders[3].Origin,    224, 104);
-    SetVector2(&WallColliders[3].Dimensions, 32, 72);
+    SetVector2f(&WallColliders[2].Origin,    224, 32);
+    SetVector2f(&WallColliders[2].Dimensions, 32, 72);
+    SetVector2f(&WallColliders[3].Origin,    224, 104);
+    SetVector2f(&WallColliders[3].Dimensions, 32, 72);
 
-    SetVector2(&WallColliders[4].Origin,       0, 144);
-    SetVector2(&WallColliders[4].Dimensions, 144, 32);
-    SetVector2(&WallColliders[5].Origin,     144, 144);
-    SetVector2(&WallColliders[5].Dimensions, 112, 32);
+    SetVector2f(&WallColliders[4].Origin,       0, 144);
+    SetVector2f(&WallColliders[4].Dimensions, 144, 32);
+    SetVector2f(&WallColliders[5].Origin,     144, 144);
+    SetVector2f(&WallColliders[5].Dimensions, 112, 32);
 
-    SetVector2(&WallColliders[6].Origin,      0, 32);
-    SetVector2(&WallColliders[6].Dimensions, 32, 72);
-    SetVector2(&WallColliders[7].Origin,      0, 104);
-    SetVector2(&WallColliders[7].Dimensions, 32, 72);
+    SetVector2f(&WallColliders[6].Origin,      0, 32);
+    SetVector2f(&WallColliders[6].Dimensions, 32, 72);
+    SetVector2f(&WallColliders[7].Origin,      0, 104);
+    SetVector2f(&WallColliders[7].Dimensions, 32, 72);
 
-    SetVector2(&(NewFloorTile.Dimensions), 16, 16);
-    SetVector2(&(NewFloorTile.Origin),      0, 0);
+    SetVector2f(&(NewFloorTile.Dimensions), 16, 16);
+    SetVector2f(&(NewFloorTile.Origin),      0, 0);
     
 
 }
@@ -351,16 +355,16 @@ void DrawTerrain(){
 
 }
 
-void EnteringNewRoom(BoxCollider *PlayerCollider, Vector2 *PlayerPosition){
+void EnteringNewRoom(BoxColliderF *PlayerCollider, Vector2f *PlayerPosition){
     int entering = -1;
 
-         if(CheckCollision(*PlayerCollider, DoorColliders[NORTH]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[NORTH])
+         if(CheckCollisionF(*PlayerCollider, DoorColliders[NORTH]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[NORTH])
         entering = NORTH;
-    else if(CheckCollision(*PlayerCollider,  DoorColliders[EAST]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[EAST] )
+    else if(CheckCollisionF(*PlayerCollider,  DoorColliders[EAST]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[EAST] )
         entering = EAST;
-    else if(CheckCollision(*PlayerCollider, DoorColliders[SOUTH]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[SOUTH])
+    else if(CheckCollisionF(*PlayerCollider, DoorColliders[SOUTH]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[SOUTH])
         entering = SOUTH;
-    else if(CheckCollision(*PlayerCollider,  DoorColliders[WEST]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[WEST] )
+    else if(CheckCollisionF(*PlayerCollider,  DoorColliders[WEST]) && Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y]->doors[WEST] )
         entering = WEST;
 
     if(entering == -1) return;
@@ -389,24 +393,24 @@ void UpdateColliders(){
 
     Level *thisRoom = Rooms[CurrentRoomCoords.x][CurrentRoomCoords.y];
 
-    if(thisRoom->doors[NORTH]) SetVector2(&WallColliders[0].Dimensions, 112, 32);
-                          else SetVector2(&WallColliders[0].Dimensions, 144, 32);
+    if(thisRoom->doors[NORTH]) SetVector2f(&WallColliders[0].Dimensions, 112, 32);
+                          else SetVector2f(&WallColliders[0].Dimensions, 144, 32);
                     
-    if(thisRoom->doors[EAST] ) SetVector2(&WallColliders[2].Dimensions, 32, 40);
-                          else SetVector2(&WallColliders[2].Dimensions, 32, 72);
+    if(thisRoom->doors[EAST] ) SetVector2f(&WallColliders[2].Dimensions, 32, 40);
+                          else SetVector2f(&WallColliders[2].Dimensions, 32, 72);
 
-    if(thisRoom->doors[SOUTH]) SetVector2(&WallColliders[4].Dimensions, 112, 32);
-                          else SetVector2(&WallColliders[4].Dimensions, 144, 32);
+    if(thisRoom->doors[SOUTH]) SetVector2f(&WallColliders[4].Dimensions, 112, 32);
+                          else SetVector2f(&WallColliders[4].Dimensions, 144, 32);
                     
-    if(thisRoom->doors[WEST] ) SetVector2(&WallColliders[6].Dimensions, 32, 40);
-                          else SetVector2(&WallColliders[6].Dimensions, 32, 72);
+    if(thisRoom->doors[WEST] ) SetVector2f(&WallColliders[6].Dimensions, 32, 40);
+                          else SetVector2f(&WallColliders[6].Dimensions, 32, 72);
 
     //place the exit room tile
     if(thisRoom->ThisLevelType == ROOM_NEXT_FLOOR){
-        SetVector2(&(NewFloorTile.Origin), 112, 80);
+        SetVector2f(&(NewFloorTile.Origin), 112, 80);
     }
     else{
-        SetVector2(&(NewFloorTile.Origin), 0, 0);
+        SetVector2f(&(NewFloorTile.Origin), 0, 0);
     }
 
 }
@@ -440,14 +444,18 @@ void MoveLevel(Vector2 directionVec, DIRECTION dir){
     UpdateColliders();
 }
 
-bool CollidedWithWalls(BoxCollider entity){
+bool CollidedWithWalls(BoxColliderF entity){
 
-    for(int i = 0; i<8; i++) if(CheckCollision(entity, WallColliders[i])) return true;
+    for(int i = 0; i<8; i++) if(CheckCollisionF(entity, WallColliders[i])) return true;
 
     return false;
 
 }
 
-bool CollidedWithNewFloorTile(BoxCollider player){
-    return CheckCollision(player, NewFloorTile);
+
+
+bool CollidedWithNewFloorTile(BoxColliderF player){
+    return CheckCollisionF(player, NewFloorTile);
 }
+
+Vector2 GetCurrentRoom(){ return CurrentRoomCoords; }
