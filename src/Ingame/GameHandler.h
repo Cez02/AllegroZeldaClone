@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PlayerHandler.h"
 #include "../lowlevel/DisplayHandler.h"
 #include "EnemyHandler.h"
+#include "UIHandler.h"
 
 void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw);
 void DrawGame();

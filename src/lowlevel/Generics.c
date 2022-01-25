@@ -19,6 +19,8 @@ ALLEGRO_BITMAP* sprite_grab(ALLEGRO_BITMAP *sheet, int x, int y, int w, int h)
 
 //game font
 ALLEGRO_FONT* GAME_FONT;
+//game ui font
+ALLEGRO_FONT* GAME_UI_FONT;
 //game timer
 ALLEGRO_TIMER* timer;
 //game event queue
@@ -28,7 +30,19 @@ LEVEL_TYPE CurrentLevel = MENU;
 
 char GameSeedString[256];
 
+ALLEGRO_FONT *LoadBitmapFont(){
+    ALLEGRO_BITMAP *sheet = al_load_bitmap("src/Assets/Ingame/testbitmap.png");
+    must_init(sheet, "UI bitmap font");
+    int ranges[] = {32,32,70,70,108,108,111,111,114,114,48,57};
+    return al_grab_font_from_bitmap(sheet, 6, ranges);
+}
+
 void InitializeGenerics(){
+
+    al_init_font_addon();
+    al_init_ttf_addon();
+    must_init(al_init_image_addon(), "image addon");
+    must_init(al_init_font_addon(), "font addon");
 
     //AssetDirectory[100] = "src/Assets/";
 
@@ -44,6 +58,10 @@ void InitializeGenerics(){
 
     GAME_FONT = al_create_builtin_font();
     must_init(GAME_FONT, "font");
+    //ALLEGRO_BITMAP *s = al_load_bitmap("src/Assets/Ingame/DungeonTileset.png");
+    //must_init(s, "ui f");
+    GAME_UI_FONT = LoadBitmapFont();
+    must_init(GAME_UI_FONT, "UI font");
     timer = al_create_timer(1.0 / 60.0);
     must_init(timer, "timer");
     queue = al_create_event_queue();

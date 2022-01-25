@@ -21,9 +21,6 @@ int main(){
     //initialize audio
     init_audio();
 
-    must_init(al_init_image_addon(), "image addon");
-    must_init(al_init_font_addon(), "font addon");
-
     ALLEGRO_EVENT currentEvent;
 
     bool done = false, redraw = true;
@@ -38,6 +35,7 @@ int main(){
 
     PlayMusic(0);
 
+    init_ui();
 
     //main game loop
     while(1){
@@ -48,7 +46,17 @@ int main(){
             case MENU:
                 HandleMainMenu(&currentEvent, &done, &redraw);
 
+                //printf("welcome to the menu\n");
+                redraw = true;
+
                 if(CurrentLevel == INGAME){
+                    if(ResetGameSettings){
+
+                        InitiateGame();
+
+                        ResetGameSettings = false;
+                    }
+
                     HandleGame(&currentEvent, &done, &redraw);
                 }
 

@@ -10,9 +10,12 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_ttf.h>
 
 //game font
 ALLEGRO_FONT* GAME_FONT;
+//game ui font
+ALLEGRO_FONT* GAME_UI_FONT;
 //game timer
 ALLEGRO_TIMER* timer;
 //game event queue
@@ -45,6 +48,8 @@ typedef enum DIRECTION{
 } DIRECTION;
 
 LEVEL_TYPE CurrentLevel;
+
+bool ResetGameSettings;
 
 ALLEGRO_BITMAP* sprite_grab(ALLEGRO_BITMAP *sheet, int x, int y, int w, int h);
 

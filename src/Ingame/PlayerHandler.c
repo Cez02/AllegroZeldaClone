@@ -1,11 +1,5 @@
 #include "PlayerHandler.h"
 
-typedef struct PlayerStats{
-    int currentHealth;
-    int maxHealth;
-
-
-} PlayerStats;
 
 PlayerStats statistics;
 
@@ -21,11 +15,14 @@ Sprite PlayerSwordSprites[4];
 Sprite currentPlayerSprite;
 Sprite currentSwordSprite;
 
+bool assetsLoaded = false;
+
 Vector2f SwordSpritePosition;
 
 int PlayerDamagedCounter = 0;
 
 #define PLAYER_SPRITE_SIZE 16
+
 
 //Damage player functions
 void DamagePlayer(int damage, Vector2f velocity){
@@ -43,6 +40,9 @@ bool IsPlayerDamaged(){
 
 //Load player  sprites
 void LoadPlayerSprites(){
+
+    if(assetsLoaded) return;
+    assetsLoaded = true;
 
     char buffer[100];
     strcpy(buffer, AssetDirectory);
@@ -101,6 +101,9 @@ void SetSwordPosition(DIRECTION dir){
 void InitPlayer(){
     
     LoadPlayerSprites();
+    
+    PlayerDead = false;
+    
     PlayerVelocity.x = 0;
     PlayerVelocity.y = 0;
     Speed.x = 1;
@@ -108,6 +111,12 @@ void InitPlayer(){
     PlayerPosition.x = 64;
     PlayerPosition.y = 64;
     PlayerDirection = NORTH;
+
+    PlayerDead = false;
+
+    statistics.currentHealth = 1000;
+    statistics.maxHealth = 1000;
+    PlayerDamagedCounter = 0;
 
     SetBoxColliderF(&PlayerCollider, 64, 64, PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
 
@@ -218,6 +227,8 @@ void PlayerAttack(){
 //handles the player input and movement
 void PlayerMovement(bool *redraw){
 
+    if(PlayerDead) return;
+
     printf("player position: %f %f\n", PlayerPosition.x, PlayerPosition.y);
     printf("player collider: %f %f\n", PlayerCollider.Origin.x, PlayerCollider.Origin.y);
 
@@ -322,6 +333,8 @@ void PlayerMovement(bool *redraw){
 //simply draws the players current sprite
 void DrawPlayer(){
 
+    if(PlayerDead) return;
+
     if(playerAttacking){
         al_draw_bitmap(currentSwordSprite.bitmap, SwordSpritePosition.x, SwordSpritePosition.y, 0);
     }
@@ -335,6 +348,13 @@ void DrawPlayer(){
 
 
 void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw){
+
+    if(PlayerDead) return;
+
+    if(statistics.currentHealth <= 0){
+        PlayerDead = true;
+        return;
+    }
 
     //keyboard_update(event);
 
@@ -359,6 +379,16 @@ void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw){
     }
 
     EnteringNewRoom(&PlayerCollider, &PlayerPosition);
-    
-
 }
+
+
+//Accessors
+
+PlayerStats GetPlayerStats(){
+    return statistics;
+}
+
+Vector2f GetPlayerPosition(){
+    return PlayerPosition;
+}
+

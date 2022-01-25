@@ -7,6 +7,7 @@
 Enemy *enemies[10][10][5];
 
 Sprite EnemySprites[64];
+bool AssetsLoaded = false;
 /*
     0 - 7: Knight sprites
 
@@ -14,6 +15,9 @@ Sprite EnemySprites[64];
 */
 
 void LoadEnemyAssets(){
+
+    if(AssetsLoaded) return;
+    AssetsLoaded = true;
 
     char buffer[100];
     strcpy(buffer, AssetDirectory);
@@ -50,7 +54,7 @@ Enemy *GenerateEnemy(Level *room, int posX, int posY){
     SetVector2f(&(newEnemy->position), (float)posX, (float)posY);
     SetBoxColliderF(&(newEnemy->collider), posX, posY, 16, 16);
     
-    newEnemy->attackPower = 10;
+    newEnemy->attackPower = 50;
     newEnemy->currentHealth = 30;
     newEnemy->maxHealth = 30;
     
@@ -160,6 +164,9 @@ void HandleEnemies(){
         if(EqualVectors(thisEnemy->position, thisEnemy->CurrentDestination, 10)){
             //time to pick a new destination
             while(EqualVectors(thisEnemy->position, thisEnemy->CurrentDestination, 30)){
+                //thisEnemy->CurrentDestination = GetPlayerPosition();
+
+                //if(EqualVectors(thisEnemy->position, GetPlayerPosition(), 10)){}
                 thisEnemy->CurrentDestination.x = 32 + (rand()%177);
                 thisEnemy->CurrentDestination.y = 32 + (rand()%97);
             }
@@ -206,7 +213,7 @@ void GenerateEnemies(int x, int y){
 
     enemies[x][y][0] = GenerateEnemy(thisRoom, 96, 80);
     enemies[x][y][1] = GenerateEnemy(thisRoom, 144, 80);
-    enemies[x][y][2] = GenerateEnemy(thisRoom, 80, 128);
+    enemies[x][y][2] = GenerateEnemy(thisRoom, 80, 115);
 }
 
 void init_enemies(){

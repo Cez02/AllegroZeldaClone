@@ -23,8 +23,13 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
         //another frame
         case ALLEGRO_EVENT_TIMER:
             
+            if(PlayerDead){
+                *redraw = true;
+                return;
+            }
+
             //player wants to select the option
-            if(ButtonClicked(ALLEGRO_KEY_ESCAPE)){
+            if(ButtonClicked(ALLEGRO_KEY_ESCAPE) && !PlayerDead){
                 *redraw = true;
                 CurrentLevel = MENU;
                 PlayMusic(0);
@@ -107,6 +112,12 @@ void DrawNewFloorText(){
 }
 
 void DrawGame(){
+
+    if(PlayerDead){
+        DrawGameDeath();
+        return;
+    }
+
     if(ChangingFloors){
         DrawNewFloorText();
         return;
@@ -114,7 +125,7 @@ void DrawGame(){
     DrawTerrain();
     DrawPlayer();
     DrawEnemies();
-    
+    DrawUI();
 }
 
 void DeinitGame(){
