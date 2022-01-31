@@ -38,7 +38,7 @@ void init_audio(){
     SFXSamples[SOUND_BUTTON_CLICK] = LoadSound(buffer, "MainMenu/Button.wav");
 
     //load music
-    MusicSamples[0] = LoadSound(buffer, "MainMenu/MenuMusic.wav");
+    MusicSamples[0] = LoadSound(buffer, "Ingame/GameMusic.wav");
     MusicSamples[1] = LoadSound(buffer, "Ingame/GameMusic.wav");
 
 }
