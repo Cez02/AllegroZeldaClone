@@ -61,6 +61,7 @@ void LoadSprites(){
 
     spritesLoaded = true;
 
+    //al_destroy_bitmap(sheet);
 }
 
 
@@ -164,6 +165,16 @@ void GenerateRooms(){
         //now we decide whether we want to add new doors
         //which means creating new rooms
 
+        /*
+
+        if we have still yet to reach the desired number of rooms, we can
+        choose a random number between 1 and min(rooms_left, rooms_available_to_create)
+        to decide how many adjacent rooms to create
+
+        from the available rooms we choose randomly according to the seed which rooms
+
+        */
+
         //no rooms should be created
         if(RoomsToCreate == 0) continue;
 
@@ -211,13 +222,18 @@ void SetColliders(){
 
     //prepare doors colliders
 
-    SetBoxColliderF(&DoorColliders[NORTH], 122, 0, 31, 20);
+    SetVector2f(&DoorColliders[NORTH].Origin, 112, 0);
+    SetVector2f(&DoorColliders[NORTH].Dimensions, 31, 20);
 
-    SetBoxColliderF(&DoorColliders[SOUTH], 112, 155, 31, 20);
+    SetVector2f(&DoorColliders[SOUTH].Origin, 112, 155);
+    SetVector2f(&DoorColliders[SOUTH].Dimensions, 31, 20);
 
-    SetBoxColliderF(&DoorColliders[EAST], 236, 72, 19, 31);
+    SetVector2f(&DoorColliders[EAST].Origin, 236, 72);
+    SetVector2f(&DoorColliders[EAST].Dimensions, 19, 31);
 
-    SetBoxColliderF(&DoorColliders[NORTH], 0, 72, 19, 31);
+    SetVector2f(&DoorColliders[WEST].Origin, 0, 72);
+    SetVector2f(&DoorColliders[WEST].Dimensions, 19, 31);
+
 
     //prepare the player spawn positions (after room transitions)
 
@@ -278,6 +294,7 @@ void DeinitTerrain(){
 }
 
 void DrawTerrain(){
+
 
     //draw the border tiles
     al_draw_bitmap(TerrainSprites[0].bitmap, 0, 0, 0);

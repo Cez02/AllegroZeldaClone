@@ -25,8 +25,8 @@ ALLEGRO_SAMPLE *LoadSound(char buffer[], char name[]){
 
 void init_audio(){
 
-    MusicVolume = 0;
-    SFXVolume = 0;
+    MusicVolume = 0.4;
+    SFXVolume = 0.4;
 
     must_init(al_install_audio(), "audio");
     must_init(al_init_acodec_addon(), "audio codecs");

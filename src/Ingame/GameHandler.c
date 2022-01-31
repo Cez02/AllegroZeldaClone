@@ -58,6 +58,8 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
             HandleEnemies();
 
             (*redraw) = true;
+            break;
+            
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             (*done) = true;
             break;
