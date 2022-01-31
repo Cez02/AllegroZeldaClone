@@ -22,7 +22,6 @@ ALLEGRO_TIMER* timer;
 ALLEGRO_EVENT_QUEUE* queue;
 
 long long GameSeed;
-int currentDigit;
 
 int Score;
 

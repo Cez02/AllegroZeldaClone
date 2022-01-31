@@ -16,5 +16,3 @@ void ChangeSFXVolume(float newValue);
 void PlaySound(enum Sounds sound);
 
 void PlayMusic(int MusicIndex);
-
-void StopSounds();

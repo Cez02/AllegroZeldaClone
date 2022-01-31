@@ -26,7 +26,7 @@ int PlayerDamagedCounter = 0;
 
 //Damage player functions
 void DamagePlayer(int damage, Vector2f velocity){
-    PlayerDamagedCounter = 26;
+    PlayerDamagedCounter = 90;
     if(PlayerVelocity.x != 0 || PlayerVelocity.y != 0)
         SetVector2f(&(velocity), -1*(float)(GetDirectionVector(PlayerDirection).x) * 10, (float)(GetDirectionVector(PlayerDirection).y) * 10);
 
@@ -63,7 +63,6 @@ void LoadPlayerSprites(){
 
     currentPlayerSprite = PlayerSpritesMovement[0];
     currentSwordSprite = PlayerSwordSprites[2];
-    //al_destroy_bitmap(sheet);
 }
 
 void SetSwordPosition(DIRECTION dir){
@@ -117,8 +116,8 @@ void InitPlayer(){
 
     PlayerDead = false;
 
-    statistics.currentHealth = 300;
-    statistics.maxHealth = 300;
+    statistics.currentHealth = 300 + (CurrentFloor/2)*100;
+    statistics.maxHealth =  300 + (CurrentFloor/2)*100;
     PlayerDamagedCounter = 0;
 
     SetBoxColliderF(&PlayerCollider, 64, 64, PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
@@ -140,8 +139,6 @@ void DeinitPlayer(){
 int frameCounter = 0;
 bool currentSpriteOffset = 0;
 void PlayerAnimation(bool *redraw){
-
-    if(IsPlayerDamaged()) return;
 
     if(PlayerVelocity.x == 0 && PlayerVelocity.y == 0) return;
 
@@ -232,18 +229,14 @@ void PlayerMovement(bool *redraw){
 
     if(PlayerDead) return;
 
-    //printf("player position: %f %f\n", PlayerPosition.x, PlayerPosition.y);
-    //printf("player collider: %f %f\n", PlayerCollider.Origin.x, PlayerCollider.Origin.y);
 
-    if(IsPlayerDamaged()){
+    if(PlayerDamagedCounter > 64){
 
         ToIdle();
 
         //update the player position;
         PlayerPosition.x += PlayerVelocity.x;
         PlayerPosition.y += PlayerVelocity.y;
-
-        //if(PlayerVelocity.x != 0 || PlayerVelocity.y != 0) ChangeDirection();
 
         OldVelocity = PlayerVelocity;
 
@@ -258,8 +251,6 @@ void PlayerMovement(bool *redraw){
 
         }
 
-        //if(PlayerPosition.x == 32) 
-
 
         PlayerCollider.Origin.x = PlayerPosition.x;
         PlayerCollider.Origin.y = PlayerPosition.y;
@@ -272,7 +263,7 @@ void PlayerMovement(bool *redraw){
     PlayerVelocity.x = 0;
     PlayerVelocity.y = 0;
 
-    if(ButtonClicked(ALLEGRO_KEY_X)){
+    if(ButtonClicked(ALLEGRO_KEY_X) && !IsPlayerDamaged()){
         PlayerAttack();
         *redraw = true;
     }
@@ -326,12 +317,10 @@ void PlayerMovement(bool *redraw){
     }
 
     if(CollidedWithNewFloorTile(PlayerCollider)){
+        PlayerDamagedCounter = 0;
         CurrentFloor++;
         ChangingFloors = true;
     }
-
-
-    //printf("player pos: %d %d\n", PlayerPosition.x, PlayerPosition.y);
 
 }
 
@@ -351,8 +340,15 @@ void DrawPlayer(){
 
 }
 
+int oldFloor = 0;
 
 void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw){
+
+    if(oldFloor != CurrentFloor){
+        oldFloor = CurrentFloor;
+        //statistics.currentHealth = 300 + (CurrentFloor/2)*100;
+        statistics.maxHealth =  300 + (CurrentFloor/2)*100;
+    }
 
     if(PlayerDead) return;
 
@@ -368,7 +364,7 @@ void HandlePlayer(ALLEGRO_EVENT *event, bool *done, bool *redraw){
 
     //handle being damaged
     if(IsPlayerDamaged()){
-        SetVector2f(&(PlayerVelocity), PlayerVelocity.x * 0.5, PlayerVelocity.y * 0.5);
+        if(PlayerDamagedCounter > 64)SetVector2f(&(PlayerVelocity), PlayerVelocity.x * 0.5, PlayerVelocity.y * 0.5);
         PlayerDamagedCounter--;
     }
 

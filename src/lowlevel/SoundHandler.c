@@ -25,8 +25,8 @@ ALLEGRO_SAMPLE *LoadSound(char buffer[], char name[]){
 
 void init_audio(){
 
-    MusicVolume = 0.4;
-    SFXVolume = 1.0;
+    MusicVolume = 0;
+    SFXVolume = 0;
 
     must_init(al_install_audio(), "audio");
     must_init(al_init_acodec_addon(), "audio codecs");
@@ -61,8 +61,4 @@ void PlayMusic(int MusicIndex){
     if(musicPlaying) al_stop_sample(&currentMusicSample);
     al_play_sample(MusicSamples[MusicIndex], MusicVolume, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &currentMusicSample);
     musicPlaying = true;
-}
-
-void StopSounds(){
-
 }

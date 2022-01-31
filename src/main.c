@@ -29,7 +29,6 @@ int main(){
 
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
-    //init_main_menu(&redraw);
 
     InitiateGame();
 
@@ -46,7 +45,6 @@ int main(){
             case MENU:
                 HandleMainMenu(&currentEvent, &done, &redraw);
 
-                //printf("welcome to the menu\n");
                 redraw = true;
 
                 if(CurrentLevel == INGAME){

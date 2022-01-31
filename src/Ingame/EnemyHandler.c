@@ -57,9 +57,9 @@ Enemy *CreateKnightEnemy(int posX, int posY){
     SetVector2f(&(newEnemy->position), (float)posX, (float)posY);
     SetBoxColliderF(&(newEnemy->collider), posX, posY, 16, 16);
     
-    newEnemy->attackPower = 50;
-    newEnemy->currentHealth = 30;
-    newEnemy->maxHealth = 30;
+    newEnemy->attackPower = 50 + (CurrentFloor-1)*50;
+    newEnemy->currentHealth = 30 + (CurrentFloor-1)*10;
+    newEnemy->maxHealth = 30 + (CurrentFloor-1)*10;
     
     for(int i = 0; i<8; i++){
         newEnemy->WalkingAnimations[i/2][i%2] = EnemySprites[i];
@@ -122,7 +122,10 @@ Enemy *GenerateEnemy(Level *room, int posX, int posY){
 bool CheckForEnemyCollision(Enemy *thisEnemy, int index){
 
     for(int otherEnemy = 0; otherEnemy < 5; otherEnemy++){
+
         if(otherEnemy == index || enemies[GetCurrentRoom().x][GetCurrentRoom().y][otherEnemy] == NULL) continue;
+
+        if(enemies[GetCurrentRoom().x][GetCurrentRoom().y][otherEnemy]->type == Heart) continue;
 
         if(CheckCollisionF(thisEnemy->collider, enemies[GetCurrentRoom().x][GetCurrentRoom().y][otherEnemy]->collider)){
             return true;
@@ -198,7 +201,7 @@ void HandleEnemies(){
                     
 
                     int heartChance = rand()%20;
-                    if(heartChance >= 18){
+                    if(heartChance >= 15){
                         //maybe spawn a heart
                         enemies[GetCurrentRoom().x][GetCurrentRoom().y][i] = CreateHeartEnemy(thisEnemy->position.x, thisEnemy->position.y);
                     }

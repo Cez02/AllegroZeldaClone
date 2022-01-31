@@ -30,6 +30,8 @@ LEVEL_TYPE CurrentLevel = MENU;
 
 char GameSeedString[256];
 
+int currentDigit;
+
 ALLEGRO_FONT *LoadBitmapFont(){
     ALLEGRO_BITMAP *sheet = al_load_bitmap("./Assets/Ingame/testbitmap.png");
     must_init(sheet, "UI bitmap font");
@@ -45,9 +47,7 @@ void InitializeGenerics(){
     must_init(al_init_font_addon(), "font addon");
 
     Score = 0;
-
-    //AssetDirectory[100] = "src/Assets/";
-
+    
     strcpy(AssetDirectory, "./Assets/");
 
     for(int i = 0; i<15; i++){
@@ -60,8 +60,6 @@ void InitializeGenerics(){
 
     GAME_FONT = al_create_builtin_font();
     must_init(GAME_FONT, "font");
-    //ALLEGRO_BITMAP *s = al_load_bitmap("src/Assets/Ingame/DungeonTileset.png");
-    //must_init(s, "ui f");
     GAME_UI_FONT = LoadBitmapFont();
     must_init(GAME_UI_FONT, "UI font");
     timer = al_create_timer(1.0 / 60.0);

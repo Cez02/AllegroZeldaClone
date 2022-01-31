@@ -4,8 +4,6 @@
 #define KEY_SEEN     1
 #define KEY_RELEASED 2
 unsigned char key[ALLEGRO_KEY_MAX];
-int MouseX, MouseY;
-bool MouseClicked = false;
 
 void keyboard_init()
 {
@@ -23,8 +21,6 @@ void keyboard_update(ALLEGRO_EVENT* event)
         case ALLEGRO_EVENT_TIMER:
             for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                 key[i] &= KEY_SEEN;
-            MouseX = event->mouse.x;
-            MouseY = event->mouse.y;
             break;
 
         case ALLEGRO_EVENT_KEY_DOWN:
@@ -32,12 +28,6 @@ void keyboard_update(ALLEGRO_EVENT* event)
             break;
         case ALLEGRO_EVENT_KEY_UP:
             key[event->keyboard.keycode] &= KEY_RELEASED;
-            break;
-        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-            MouseClicked = true;
-            break;
-        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-            MouseClicked = false;
             break;
     }
 }

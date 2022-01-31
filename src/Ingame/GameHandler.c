@@ -17,8 +17,6 @@ int ChangingFloorsFrameCount = 0;
 
 void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
 
-    //printf("Handling\n");
-
     switch(event->type){
 
         //another frame
@@ -60,29 +58,6 @@ void HandleGame(ALLEGRO_EVENT *event, bool *done, bool *redraw){
             HandleEnemies();
 
             (*redraw) = true;
-            
-        case ALLEGRO_EVENT_KEY_DOWN:
-        /*
-            if(event->keyboard.keycode == ALLEGRO_KEY_I){
-                MoveLevel(0,1, NORTH);
-                *redraw = true;
-            }
-            if(event->keyboard.keycode == ALLEGRO_KEY_L){
-                MoveLevel(1, 0, EAST);
-                *redraw = true;
-            }
-            if(event->keyboard.keycode == ALLEGRO_KEY_K){
-                MoveLevel(0, -1, SOUTH);
-                *redraw = true;
-            }
-            if(event->keyboard.keycode == ALLEGRO_KEY_J){
-                MoveLevel(, WEST);
-                *redraw = true;
-            }*/
-
-
-
-            break;
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             (*done) = true;
             break;

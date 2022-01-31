@@ -26,7 +26,6 @@ void HandleOption(){
 }
 
 void HandleSettings(ALLEGRO_EVENT *event, bool *done, bool *redraw){
-    //keyboard_update(event);
 
     switch(event->type){
 
